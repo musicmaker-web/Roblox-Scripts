@@ -1,0 +1,303 @@
+1️⃣ Button
+
+Erstellung:
+
+local btn = Tab:Button("Button Text", function() print("Clicked") end)
+
+
+Features:
+
+Callback direkt beim Klick
+
+Optional btn:OnClick(fn) für zusätzliche Events
+
+Nutzung: Perfekt für Aktionen wie „Attack“, „Save“, etc.
+
+2️⃣ Toggle
+
+Erstellung:
+
+local toggle = Tab:Toggle("Toggle Label", false, function(state) print(state) end)
+
+
+Features:
+
+Boolescher Zustand true/false
+
+Callback bei Änderung
+
+API:
+
+toggle:Set(true/false) → Zustand setzen
+
+toggle:Get() → aktueller Zustand
+
+toggle:OnChanged(fn) → Event bei Änderung
+
+Nutzung: Für Optionen wie „Stealth Mode“ oder „Enable Blur“
+
+3️⃣ Slider
+
+Erstellung:
+
+local slider = Tab:Slider("Slider Label", minValue, maxValue, defaultValue, function(val) print(val) end, precision)
+
+
+Features:
+
+Optional ON/OFF Toggle
+
+Präzisions-Handling für Dezimalwerte
+
+API:
+
+slider:Set(val) → Wert setzen
+
+slider:Get() → Wert abrufen
+
+slider:Enable() / slider:Disable()
+
+slider:Destroy() → Element entfernen
+
+Nutzung: Für Werte wie „Damage“, „Volume“ oder „Transparency“
+
+4️⃣ Label
+
+Erstellung:
+
+local lbl = Tab:Label("Text")
+
+
+Features:
+
+Einfaches Label
+
+Rückgabe: TextLabel für weitere Anpassungen
+
+Nutzung: Abschnitts-Titel oder Info-Text
+
+5️⃣ TextBox
+
+Erstellung:
+
+local txtBox = Tab:TextBox("Placeholder", function(text) print(text) end)
+
+
+Features:
+
+Callback beim Text ändern
+
+Nutzung: Für Eingaben, z.B. Chat-Kommandos oder Namen
+
+6️⃣ Dropdown
+
+Erstellung Single:
+
+local dd = Tab:Dropdown("Dropdown Label", {"Option 1","Option 2"}, function(opt, state, fullSelection) print(opt) end)
+
+
+Erstellung Multi:
+
+local ddMulti = Tab:Dropdown("Dropdown Label", {"A","B"}, function(opt, state, selection) end, true)
+
+
+Features:
+
+Multi-Selection (Checkboxes)
+
+Callback: (opt, state, fullSelection)
+
+dd:SetOptions(newTable) → neue Optionen setzen
+
+dd:Refresh() → Dropdown neu aufbauen
+
+Nutzung: Auswahl von Modi, Waffen, Presets
+
+7️⃣ DropdownSearch
+
+Wie Dropdown, aber mit Suchfunktion
+
+API und Multi-Selection wie Dropdown
+
+Live-Filter für viele Optionen
+
+Nutzung: Große Listen durchsuchen, z.B. Items, Skills
+
+8️⃣ FullRGBPicker
+
+Erstellung:
+
+local picker = Tab:FullRGBPicker("Pick Color", Color3.fromRGB(255,0,0), function(color) print(color) end)
+
+
+Features:
+
+Farbkreis + Helligkeitsslider
+
+Cursor zeigt aktuelle Farbe
+
+Callback bei jeder Farbänderung
+
+Öffnen/Schließen Button integriert
+
+Nutzung: GUI-Farbe, Character Customization, Theme Picker
+
+9️⃣ Keybind
+
+Erstellung:
+
+local keybind = Tab:Keybind("Skill Key", "F", function(key) print(key) end)
+
+
+Features:
+
+Klick → Listening → Taste drücken
+
+keybind:OnChanged(fn) → Event bei Änderung
+
+API:
+
+keybind:Set("G")
+
+keybind:Get()
+
+keybind:Destroy()
+
+Nutzung: Shortcuts, Hotkeys
+
+🔟 Notifications
+
+Erstellung / Nutzung:
+
+Library.Notify("Title","Message","Info",3)
+Library.Notify("Title","Message","Success",3)
+Library.Notify("Title","Message","Warning",3)
+Library.Notify("Title","Message","Error",3)
+
+
+Features:
+
+Verschiedene Typen (Info, Success, Warning, Error)
+
+Auto-resize und Tween-Animation
+
+Manuelles Schließen über Button
+
+1️⃣1️⃣ Settings Tab / Config
+
+Automatische Erstellung:
+
+_G.showOptionalSettings = true
+
+
+Speichert:
+
+Transparenz, Farbe, Resize, Drag, Keybinds, GUI Size
+
+API: Save/Load Config via JSON
+
+Nutzt Sliders, Toggles, ColorPicker, Dropdowns, Keybinds
+
+Beispiel: Vollständige Demo mit allen Features
+--================ DEMO: CYBERPUNK UI VOLLSTÄNDIG =================--
+_G.showOptionalSettings = true -- Settings Tab automatisch erstellen
+
+--================ CREATE TABS =================--
+local Combat = Library:CreateTab("Combat")
+Combat:Label("=== Combat Controls ===")
+
+-- Button Demo
+local attackBtn = Combat:Button("Attack", function()
+	print("Attack Clicked")
+end)
+attackBtn:OnClick(function()
+	print("Attack OnClick Event")
+end)
+
+-- Toggle Demo
+local stealthToggle = Combat:Toggle("Stealth Mode", false)
+stealthToggle:OnChanged(function(state)
+	print("Stealth Mode:", state)
+end)
+
+-- Slider Demo
+local dmgSlider = Combat:Slider("Damage", 0, 100, 50, function(val)
+	print("Damage Slider:", val)
+end)
+
+-- TextBox Demo
+local cmdBox = Combat:TextBox("Enter command...", function(txt)
+	print("Command:", txt)
+end)
+
+-- Dropdown Single
+local modeDropdown = Combat:Dropdown("Mode", {"Option 1","Option 2","Option 3"}, function(opt, state, fullSelection)
+	print("Single Dropdown Selected:", opt)
+end)
+
+-- Dropdown Multi
+local multiDropdown = Combat:Dropdown("Weapons", {"Sword","Bow","Gun"}, function(opt, state, selection)
+	print("Multi Dropdown:")
+	for k,v in pairs(selection) do
+		if v then print("✔", k) end
+	end
+end, true)
+multiDropdown.refreshOnUpdate = true
+
+-- DropdownSearch Single
+local searchDropdown = Combat:DropdownSearch("Search Mode", {"Stealth","Combat","Explore"}, function(opt, state, fullSelection)
+	print("Search Dropdown Selected:", opt)
+end)
+
+-- DropdownSearch Multi
+local searchMulti = Combat:DropdownSearch("Search Weapons", {"Sword","Bow","Gun","Axe"}, function(opt, state, selection)
+	print("Search Multi Selected:")
+	for k,v in pairs(selection) do
+		if v then print("✔", k) end
+	end
+end, true)
+
+-- FullRGBPicker Demo
+local colorPicker = Combat:FullRGBPicker("Pick Color", Color3.fromRGB(255,0,0), function(color)
+	print("Picked Color:", color)
+end)
+
+--================ KEYBIND Demo =================--
+local keybindTest = Combat:Keybind("Activate Skill", "F", function(key)
+	print("Keybind pressed:", key)
+end)
+keybindTest:OnChanged(function(newKey)
+	print("Keybind changed to:", newKey)
+end)
+
+--================ NOTIFICATIONS =================--
+Combat:Button("Show Info Notification", function()
+	Library.Notify("Info","This is an info notification","Info",3)
+end)
+
+Combat:Button("Show Success Notification", function()
+	Library.Notify("Success","This is a success notification!","Success",3)
+end)
+
+Combat:Button("Show Warning Notification", function()
+	Library.Notify("Warning","Be careful!","Warning",3)
+end)
+
+Combat:Button("Show Error Notification", function()
+	Library.Notify("Error","Something went wrong!","Error",3)
+end)
+
+--================ TEST BUTTONS =================--
+Combat:Button("Set Damage to 75", function()
+	dmgSlider:Set(75)
+end)
+
+Combat:Button("Toggle Stealth", function()
+	stealthToggle:Set(not stealthToggle:Get())
+end)
+
+-- Label zum Abschluss
+Combat:Label("=== Ende der Demo ===")
+
+
+✅ Mit diesem Demo-Script kannst du alle UI-Elemente testen, sehen, wie die API funktioniert, und direkt Callbacks, Multi-Selects, Sliders, Keybinds und Notifications nutzen.
